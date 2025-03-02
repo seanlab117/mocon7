@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
             default: {
-//                Intent intent = new Intent(this, MainActivity10.class);
-//                ActivityResultLauncher.launch(intent);
+                Intent intent = new Intent(this, MainActivity7.class);
+                ActivityResultLauncher.launch(intent);
                 Toast.makeText(getApplicationContext(), "position default", Toast.LENGTH_LONG).show();
             }
             break;
