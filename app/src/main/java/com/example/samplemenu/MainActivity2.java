@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -37,6 +39,11 @@ public class MainActivity2 extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
+    //sean
+    EditText Et_text;
+    Button button;
+    TextView Text_view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +52,53 @@ public class MainActivity2 extends AppCompatActivity {
         progressDialog = new ProgressDialog(MainActivity2.this);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
+        Et_text = findViewById(R.id.inputText);
+        Text_view = findViewById(R.id.outputText);
+        Et_text.setText("scenario 1");
+        button = findViewById(R.id.submitButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    String numberString ="0"; // Et_text.getText().toString();
+                    int number = Integer.parseInt(numberString);
+
+                    StringBuilder result = new StringBuilder();
+
+//                    for (int i = 1; i <= 10; i++) {
+//                        result.append(number).append(" x ").append(i).append(" = ").append(number * i).append("\n");
+//                    }
+                    for (int i = 1; i <= 3; i++) {
+                        int number2=Integer.parseInt("10");;
+                        result.append("motor").append("  ").append(i).append(" = ").append(number2 * i).append("\n");
+                    }
+                    for (int j = 1; j <= 4; j++) {
+                        int number3=Integer.parseInt("10");;
+                        result.append("RGB").append("  ").append(j).append(" = ").append(number3 * j).append("\n");
+                    }
+                    for (int k = 1; k <= 3; k++) {
+                        int number4=Integer.parseInt("10");;
+                        result.append("Display").append("  ").append(k).append(" = ").append(number4 * k).append("\n");
+                    }
+
+                    Text_view.setText(result.toString());
+                } catch (NumberFormatException e) {
+                    Text_view.setText("Please enter a valid number");
+                } catch (Exception e) {
+                    Text_view.setText("An error occurred");
+                }
+
+            }
+        });
 
         //this code for list the available wifi list
         ListView wifiList = findViewById(R.id.wifiList);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         wifiList.setAdapter(adapter);
+
+
+
         wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
