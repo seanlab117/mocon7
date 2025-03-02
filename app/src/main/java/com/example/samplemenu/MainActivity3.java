@@ -2,6 +2,7 @@ package com.example.samplemenu;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class MainActivity3 extends Activity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 123;
 
     ProgressDialog progressDialog;
-
+    String address,port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,15 @@ public class MainActivity3 extends Activity {
         // Disable send button until a connection is made
         buttonSend.setEnabled(false);
         //
-
+        Log.d("haha","MainActivity3");
+        Intent secondIntent = getIntent();
+        secondIntent.getIntExtra("address", 0);
+        address =secondIntent.getStringExtra("address");
+        port =secondIntent.getStringExtra("port");
+        Log.d("haha","address"+address+"port"+port);
+        editTextAddress.setText(address);
+        editTextPort.setText(port);
+        Log.d("haha","address"+address+"port"+port);
 
 
     }
@@ -204,9 +213,13 @@ public class MainActivity3 extends Activity {
             try {
 
                 // Open the socket and connect to it
+                Intent secondIntent = getIntent();
+                secondIntent.getIntExtra("address", 0);
+                secondIntent.getIntExtra("port", 0);
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(address, port), timeout);
-
+                Log.d("haha", "address"+address);
+                Log.d("haha", "port"+port);
                 // Get the input and output streams
                 inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 outStream = socket.getOutputStream();
