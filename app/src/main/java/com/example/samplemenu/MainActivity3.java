@@ -7,17 +7,24 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Simple UI demonstrating how to open a serial communication link to a
@@ -46,6 +53,14 @@ public class MainActivity3 extends Activity {
 
     ProgressDialog progressDialog;
     String address,port;
+    EditText Et_text;
+    Button button;
+    TextView Text_view;
+
+    private Spinner types;
+    private Button show;
+    private ListView drinks;
+    private MockupDA da;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +76,15 @@ public class MainActivity3 extends Activity {
         editTextPort = (EditText)findViewById(R.id.port);
         editSend = (EditText)findViewById(R.id.editSend);
         buttonConnect = (Button)findViewById(R.id.connect);
+
         buttonSend = (Button)findViewById(R.id.buttonSend);
 
         // Disable send button until a connection is made
         buttonSend.setEnabled(false);
+
         //
+        // editSend.setText("senario 1");
+
         Log.d("haha","MainActivity3");
         Intent secondIntent = getIntent();
         secondIntent.getIntExtra("address", 0);
@@ -75,13 +94,82 @@ public class MainActivity3 extends Activity {
         editTextAddress.setText(address);
         editTextPort.setText(port);
         Log.d("haha","address"+address+"port"+port);
+        
+        Et_text = findViewById(R.id.inputText);
+        Text_view = findViewById(R.id.outputText);
+        Et_text.setText("scenario 1");
+        button = findViewById(R.id.submitButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    String numberString ="0"; // Et_text.getText().toString();
+                    int number = Integer.parseInt(numberString);
+
+                    StringBuilder result = new StringBuilder();
+
+//                    for (int i = 1; i <= 10; i++) {
+//                        result.append(number).append(" x ").append(i).append(" = ").append(number * i).append("\n");
+//                    }
+                    for (int i = 1; i <= 3; i++) {
+                        int number2=Integer.parseInt("10");;
+                        result.append("motor").append("  ").append(i).append(" = ").append(number2 * i).append("\n");
+                    }
+                    for (int j = 1; j <= 3; j++) {
+                        int number3=Integer.parseInt("10");;
+                        result.append("RGB").append("  ").append(j).append(" = ").append(number3 * j).append("\n");
+                    }
+                    for (int k = 1; k <= 1; k++) {
+                        int number4=Integer.parseInt("10");;
+                        result.append("Display").append("  ").append(k).append(" = ").append(number4 * k).append("\n");
+                    }
+
+                    Text_view.setText(result.toString());
+                } catch (NumberFormatException e) {
+                    Text_view.setText("Please enter a valid number");
+                } catch (Exception e) {
+                    Text_view.setText("An error occurred");
+                }
+
+            }
+        });
+
 
 
     }
+    private void showDrinksList(List<Drink> drinkList){
+        List<String> displayList = new ArrayList<>();
+        for (Drink drink : drinkList) {
+            String displayString = drink.toString();
+            displayList.add(displayString);
+        }
 
+        // Create an ArrayAdapter to display the list of drinks in the ListView
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity3.this, android.R.layout.simple_list_item_1, displayList);
+        drinks.setAdapter(adapter);
+
+        drinks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = displayList.get(position);
+                Toast.makeText(MainActivity3.this, "클릭한 아이템: " + selectedItem, Toast.LENGTH_SHORT).show();
+                //openBTSCAN2(position);
+            }
+        });
+
+
+    }
     /**
      * Helper function, print a status to both the UI and program log.
      */
+
+    private void bindSpinner() {
+        List<String> Dtypes = da.getDrinkTypes();
+        ArrayAdapter<String> spnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Dtypes);
+        types.setAdapter(spnAdapter);
+        //return spnAdapter;
+    }
     void setStatus(String s) {
         Log.v(TAG, s);
         textStatus.setText(s);
@@ -132,6 +220,8 @@ public class MainActivity3 extends Activity {
      */
     private void connected() {
         setStatus("Connected.");
+        Log.v("haha", "Connected.");
+
         buttonSend.setEnabled(true);
     }
 
@@ -163,8 +253,9 @@ public class MainActivity3 extends Activity {
 
         String msg = editSend.getText().toString();
         if(msg.length() == 0) return;
-
+        msg="scenario 1";
         wifiTask.sendMessage(msg);
+
         editSend.setText("");
 
         textTX.setText(msg);
